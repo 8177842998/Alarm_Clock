@@ -8,9 +8,11 @@ const activeAlarms = document.querySelector(".activeAlarms");
 const setAlarm = document.getElementById("set");
 let alarmsArray = [];
 let alarmSound = new Audio("./alarm.mp3");
-var pe="AM";
 
-let initialHour = 0,
+let selectElement = document.getElementById("ampm");
+
+
+let initialHour =0,
   initialMinute = 0,
   initialSecond = 0,
   alarmIndex = 0;
@@ -47,18 +49,37 @@ function displayTimer() {
   ];
 
   //Display time
-  timerRef.innerHTML = `${hours}:${minutes}:${seconds}`;
+  let ampm = selectElement.value;
+  if (hours > 12) {
+    hours -= 12;
+    ampm = "PM";
+  } else if (hours === "00") {
+    hours = 12;
+    ampm = "AM";
+  } else if (hours === "12") {
+    ampm = "PM";
+  } else {
+    ampm = "AM";
+  }
+
+  timerRef.innerHTML = `${hours}:${minutes}:${seconds} ${ampm}`;
 
   //Alarm
-  alarmsArray.forEach((alarm, index) => {
+  alarmsArray.forEach((alarm) => {
     if (alarm.isActive) {
-      if (`${alarm.alarmHour}:${alarm.alarmMinute}:${alarm.alarmSecond}` === `${hours}:${minutes}:${seconds}`) {
-        alarmSound.play();
-        alarmSound.loop = true;
+      if (
+        alarm.alarmHour === hours &&
+        alarm.alarmMinute === minutes &&
+        alarm.alarmSecond === seconds &&
+        alarm.ampm === ampm
+      ) {
+       alarmsArray[index].audio.play();
+    alarmsArray[index].audio.loop = true;
+
       }
     }
   });
-}
+};
 
 const inputCheck = (inputValue) => {
   inputValue = parseInt(inputValue);
@@ -81,17 +102,22 @@ secondInput.addEventListener("input", () => {
     secondInput.value = inputCheck(secondInput.value);
   });
 
+  // pe.addEventListener("input", ()=>{
+  //   pe.value= inputCheck(pe.value);
+  // })
+
 //Create alarm div
 
 const createAlarm = (alarmObj) => {
   //Keys from object
-  const { id, alarmHour, alarmMinute, alarmSecond } = alarmObj;
+  const { id, alarmHour, alarmMinute, alarmSecond, ampm } = alarmObj;
   //Alarm div
   let alarmDiv = document.createElement("div");
   alarmDiv.classList.add("alarm");
   alarmDiv.setAttribute("data-id", id);
-  alarmDiv.innerHTML = `<span>${alarmHour}: ${alarmMinute}: ${alarmSecond}</span>`;
-
+  alarmDiv.innerHTML = `<span>${alarmHour}:${alarmMinute}:${alarmSecond} ${ampm}</span>`;
+  
+  
   //checkbox
   let checkbox = document.createElement("input");
   checkbox.setAttribute("type", "checkbox");
@@ -118,20 +144,13 @@ const createAlarm = (alarmObj) => {
 setAlarm.addEventListener("click", () => {
   alarmIndex += 1;
 
-//   //am pm value
-// for(let i=2; i>0;i--){
-//   let ampm=i==1 ? "AM": 'PM';
-//   let option= `<option value="${ampm}">${ampm}</option>`;
-//   selectMenu[2].firstElementChild.insertAdjacentHTML("afterend",option);
-// }
-
   //alarmObject
   let alarmObj = {};
   alarmObj.id = `${alarmIndex}_${hourInput.value}_${minuteInput.value}_${secondInput}`;
   alarmObj.alarmHour = hourInput.value;
   alarmObj.alarmMinute = minuteInput.value;
   alarmObj.alarmSecond = secondInput.value;
-  // alarmObj.ampm= ampmInput.value
+  alarmObj.ampm = selectElement.value;
   alarmObj.isActive = false;
   console.log(alarmObj);
   alarmsArray.push(alarmObj);
@@ -141,6 +160,7 @@ setAlarm.addEventListener("click", () => {
   secondInput.value = appendZero(initialSecond);
        
 });
+
 
 //Start Alarm
 const startAlarm = (e) => {
