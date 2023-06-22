@@ -44,17 +44,22 @@
           />
           <!-- <label for="cars">Choose a car:</label> -->
 
-<select name="ampm" id="ampm">
-  <option value="AM">AM</option>
-  <option value="PM">PM</option>
-</select>
+          <select name="ampm" id="ampm">
+            <option value="AM">AM</option>
+            <option value="PM">PM</option>
+          </select>
         </div>
         <button id="set">Add Alarm</button>
         <div class="activeAlarms"></div>
       </div>
     </div>
+
+    <!-- Custom Notification Element -->
+    <div id="notification" class="notification hidden">
+      <span id="notificationMessage"></span>
+    </div>
+
     <!-- Script -->
     <script src="script.js"></script>
-    <!-- <script src="new.js"></script> -->
   </body>
 </html>
