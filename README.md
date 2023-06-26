@@ -4,3 +4,5 @@ when current time matches with set time alarm clock pop-up an alert message. aft
 One can manually start, stop and delete the set alarm by clicking on the provided buttons.
 
 Deploy link:https://cn-alarmapp.netlify.app/
+
+![Home Page Image Link] : https://github.com/8177842998/Alarm_Clock/blob/main/Screenshot%202023-06-26%20212713.png
